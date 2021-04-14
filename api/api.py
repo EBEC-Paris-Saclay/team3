@@ -8,10 +8,14 @@ if __name__ == "__main__":
     - other objectives
     - get lat and lon as parameters
     """
+ 
 
     # get coords
     lat =   48.89227652 
     lon =   2.253773690 
+
+    # lat =   48.89394122 
+    # lon =   2.247959188 
     
     # lat = 48.89525193
     # lon = 2.247122897
@@ -104,6 +108,7 @@ if __name__ == "__main__":
     nom = way.tags["name"]
     # ville = way.tags["addr:city"]
     nodes = way.get_nodes(resolve_missing=True)
+    # print(list(map(lambda node: node.id,nodes)))
     # verification que way a bien un seul element
 
     # trouver le segment le plus proche de l'arbre
@@ -146,7 +151,7 @@ if __name__ == "__main__":
                 return ways[1].tags["name"]
         if indice + direction < 0:
             return "debut de route"
-        elif indice + direction >= len(ways):
+        elif indice + direction >= len(nodes):
             return "fin de route"
         else:
             return trouver_intersection(nodes, indice + direction, direction, nom_route)
