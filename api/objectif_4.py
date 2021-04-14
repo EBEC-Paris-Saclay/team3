@@ -9,14 +9,18 @@ if __name__ == "__main__":
     - get lat and lon as parameters
     """
 
-nb_arbres=int(input())
+    # nb_arbres=int(input())
 
-    lat_arbre=[]
-    lon_arbre=[]
+    # lat_arbre=[]
+    # lon_arbre=[]
 
-    for i in range(nb_arbres):
-        lat_arbre+=[float(input())]
-        lon_arbre+=[float(input())]
+    # for i in range(nb_arbres):
+    #     lat_arbre+=[float(input())]
+    #     lon_arbre+=[float(input())]
+
+    nb_arbres=2
+    lat_arbre=[48.897121406,48.89627806]
+    lon_arbre=[2.2479852324,2.248657510]
 
     # get coords
     lat_arbre_1 =   lat_arbre[0]
@@ -55,7 +59,7 @@ nb_arbres=int(input())
     route_trouvee = False
     while not(route_trouvee):
         if nb_way == 0:
-            radius = 2 * radius
+            radius = 3/2 * radius
             r = api.query(
                 """
             <query type="way">
@@ -75,7 +79,7 @@ nb_arbres=int(input())
                     way=r.ways[indice]
                 indice+=1
             if nb_route_nommees==2:
-                radius = 3 / 4 * radius
+                radius = 5 / 6 * radius
                 r = api.query(
                     """
                 <query type="way">
@@ -87,7 +91,7 @@ nb_arbres=int(input())
                     )
                 )
             elif nb_route_nommees==0:
-                radius = 2 * radius
+                radius = 3/2 * radius
                 r = api.query(
                     """
                 <query type="way">
@@ -143,7 +147,7 @@ nb_arbres=int(input())
     
     indice_min_lst = []
     for i in range(nb_arbres):
-        indice_min_lst+=trouver_indice_min(lat_arbre[i]],lon_arbre[i]})
+        indice_min_lst+=[trouver_indice_min(lat_arbre[i],lon_arbre[i])]
     
 
     def trouver_intersection(nodes, indice, direction, nom_route):
@@ -161,10 +165,9 @@ nb_arbres=int(input())
         )
         ways = result.ways
         if len(ways) > 1:
-            if "name" in ways[0].tags.keys() and ways[0].tags["name"] != nom_route:
-                return ways[0].tags["name"]
-            elif "name" in ways[1].tags.keys() and ways[1].tags["name"] != nom_route:
-                return ways[1].tags["name"]
+            for i in range(len(ways)):
+                if "name" in ways[i].tags.keys() and ways[i].tags["name"] != nom_route:
+                    return ways[i].tags["name"]
         if indice + direction < 0:
             return "debut de route"
         elif indice + direction >= len(nodes):
@@ -172,12 +175,19 @@ nb_arbres=int(input())
         else:
             return trouver_intersection(nodes, indice + direction, direction, nom_route)
 
-    if indice_min_1<indice_min_2:
-        intersection1=trouver_intersection(nodes, indice_min_1, -1, nom)
-        intersection2=trouver_intersection(nodes, indice_min_2+1, 1, nom)
-    else :
-        intersection1=trouver_intersection(nodes, indice_min_2, -1, nom)
-        intersection2=trouver_intersection(nodes, indice_min_1+1, 1, nom)
+    max_indice_min = 0
+    min_indice_min = len(nodes)-1
+
+    for i in indice_min_lst:
+        if i < min_indice_min:
+            min_indice_min = i
+        if i > max_indice_min:
+            max_indice_min = i
+    
+
+    
+    intersection1=trouver_intersection(nodes, min_indice_min, -1, nom)
+    intersection2=trouver_intersection(nodes, max_indice_min+1, 1, nom)
 
     
 

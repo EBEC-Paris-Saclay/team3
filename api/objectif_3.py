@@ -49,7 +49,7 @@ if __name__ == "__main__":
     route_trouvee = False
     while not(route_trouvee):
         if nb_way == 0:
-            radius = 2 * radius
+            radius = 3/2 * radius
             r = api.query(
                 """
             <query type="way">
@@ -69,7 +69,7 @@ if __name__ == "__main__":
                     way=r.ways[indice]
                 indice+=1
             if nb_route_nommees==2:
-                radius = 3 / 4 * radius
+                radius = 5 / 6 * radius
                 r = api.query(
                     """
                 <query type="way">
@@ -81,7 +81,7 @@ if __name__ == "__main__":
                     )
                 )
             elif nb_route_nommees==0:
-                radius = 2 * radius
+                radius = 3/2 * radius
                 r = api.query(
                     """
                 <query type="way">
