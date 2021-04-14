@@ -7,7 +7,7 @@ if __name__ == "__main__":
     lon = 2.247122897
 
     #init du radius
-    radius = 1
+    radius = 5
     # wrap the query
 
     # query
@@ -22,28 +22,28 @@ if __name__ == "__main__":
     )
 
     nb_way=len(r.ways)
-    while nb_way!=1:
-        if nb_way==0:
-            radius = 2*radius
-            r = api.query(
-            """
-            <query type="way">
-            <around lat="{}" lon="{}" radius="{}"/>
-            </query>
-            <print />
-            """.format(lat,lon,radius)
-            )
-        else:
-            radius = 3/4*radius
-            r = api.query(
-            """
-            <query type="way">
-            <around lat="{}" lon="{}" radius="{}"/>
-            </query>
-            <print />
-            """.format(lat,lon,radius)
-            )
-        nb_way=len(r.ways)
+    # while nb_way!=1:
+    #     if nb_way==0:
+    #         radius = 2*radius
+    #         r = api.query(
+    #         """
+    #         <query type="way">
+    #         <around lat="{}" lon="{}" radius="{}"/>
+    #         </query>
+    #         <print />
+    #         """.format(lat,lon,radius)
+    #         )
+    #     else:
+    #         radius = 3/4*radius
+    #         r = api.query(
+    #         """
+    #         <query type="way">
+    #         <around lat="{}" lon="{}" radius="{}"/>
+    #         </query>
+    #         <print />
+    #         """.format(lat,lon,radius)
+    #         )
+    #     nb_way=len(r.ways)
 
     def prod_scalaire(vect1,vect2):
         lat1,lon1=vect1
@@ -53,6 +53,13 @@ if __name__ == "__main__":
     def norme_carre(vect):
         return(prod_scalaire(vect,vect))
 
+    areas = api.query("""
+    
+    is_in({},{});
+    area;
+    """.format(lat,lon))
+            
+    print(areas.areas)
     # query output processing
     way = r.ways[0]
     nom = way.tags["name"]
@@ -102,7 +109,7 @@ if __name__ == "__main__":
             return trouver_intersection(nodes,indice+direction,direction,nom_route)
         
     intersection1,intersection2 = (trouver_intersection(nodes,indice_min,-1,nom),trouver_intersection(nodes,indice_min+1,1,nom))
-
+    
     print("Sur la " + nom + " entre la " + intersection1 + " et la " + intersection2 + " dans la ville de " )
 
 
