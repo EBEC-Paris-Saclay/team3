@@ -11,8 +11,11 @@ if __name__ == "__main__":
  
 
     # get coords
-    lat =   48.89227652 
-    lon =   2.253773690 
+    lat_arbre_1 =   48.89227652 
+    lon_arbre_1 =   2.253773690 
+
+    lat_arbre_2 =   48.89227652 
+    lon_arbre_2 =   2.253773690
 
     # lat =   48.89394122 
     # lon =   2.247959188 
@@ -21,7 +24,7 @@ if __name__ == "__main__":
     # lon = 2.247122897
     # retrieve city and way
     locator = Nominatim(user_agent="myGeocoder")
-    coordinates = "{}, {}".format(lat, lon)
+    coordinates = "{}, {}".format(lat_arbre_1, lon)
     location = locator.reverse(coordinates)
     addr = location.address
     addr = addr.split(",")
@@ -38,7 +41,7 @@ if __name__ == "__main__":
     </query>
     <print />
     """.format(
-            lat, lon, radius
+            lat_arbre_1, lon, radius
         )
     )
 
@@ -54,7 +57,7 @@ if __name__ == "__main__":
             </query>
             <print />
             """.format(
-                    lat, lon, radius
+                    lat_arbre_1, lon, radius
                 )
             )
         else:
@@ -74,7 +77,7 @@ if __name__ == "__main__":
                 </query>
                 <print />
                 """.format(
-                        lat, lon, radius
+                        lat_arbre_1, lon, radius
                     )
                 )
             elif nb_route_nommees==0:
@@ -86,7 +89,7 @@ if __name__ == "__main__":
                 </query>
                 <print />
                 """.format(
-                        lat, lon, radius
+                        lat_arbre_1, lon, radius
                     )
                 )
             else:
@@ -115,24 +118,24 @@ if __name__ == "__main__":
     distance_min_carre = 10000
     indice_min = 0
     for indice in range(len(nodes) - 1):
-        lat1 = float(nodes[indice].lat)
+        lat1 = float(nodes[indice].lat_arbre_1)
         lon1 = float(nodes[indice].lon)
-        lat2 = float(nodes[indice + 1].lat)
+        lat2 = float(nodes[indice + 1].lat_arbre_1)
         lon2 = float(nodes[indice + 1].lon)
         t = prod_scalaire(
-            (lat - lat1, lon - lon1), (lat2 - lat1, lon2 - lon1)
+            (lat_arbre_1 - lat1, lon - lon1), (lat2 - lat1, lon2 - lon1)
         ) / norme_carre((lat2 - lat1, lon2 - lon1))
         t = min(max(0, t), 1)
         latH = lat1 + (lat2 - lat1) * t
         lonH = lon1 + (lon2 - lon1) * t
-        distance = norme_carre((lat - latH, lon - lonH))
+        distance = norme_carre((lat_arbre_1 - latH, lon - lonH))
         if distance_min_carre > distance:
             distance_min_carre = distance
             indice_min = indice
 
     def trouver_intersection(nodes, indice, direction, nom_route):
-        lat = float(nodes[indice].lat)
-        lon = float(nodes[indice].lon)
+        lat_node = float(nodes[indice].lat)
+        lon_node = float(nodes[indice].lon)
         result = api.query(
             """
             <query type="way">
@@ -140,7 +143,7 @@ if __name__ == "__main__":
             </query>
             <print />
             """.format(
-                lat, lon
+                lat_node, lon_node
             )
         )
         ways = result.ways
@@ -156,10 +159,9 @@ if __name__ == "__main__":
         else:
             return trouver_intersection(nodes, indice + direction, direction, nom_route)
 
-    intersection1, intersection2 = (
-        trouver_intersection(nodes, indice_min, -1, nom),
-        trouver_intersection(nodes, indice_min + 1, 1, nom),
-    )
+    
+
+
     # print(addr)
     print(
         "Sur la "
