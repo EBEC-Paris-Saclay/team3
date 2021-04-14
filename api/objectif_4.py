@@ -8,14 +8,20 @@ if __name__ == "__main__":
     - other objectives
     - get lat and lon as parameters
     """
- 
-    
-    # get coords
-    lat_arbre_1 =   48.897121406 
-    lon_arbre_1 =   2.2479852324
 
-    lat_arbre_2 =   48.89627806 
-    lon_arbre_2 =   2.248657510
+nb_arbres=int(input())
+
+    lat_arbre=[]
+    lon_arbre=[]
+
+    for i in range(nb_arbres):
+        lat_arbre+=[float(input())]
+        lon_arbre+=[float(input())]
+
+    # get coords
+    lat_arbre_1 =   lat_arbre[0]
+    lon_arbre_1 =   lon_arbre[0]
+
 
     # lat =   48.89394122 
     # lon =   2.247959188 
@@ -135,8 +141,10 @@ if __name__ == "__main__":
                 indice_min = indice
         return indice_min
     
-    indice_min_1 = trouver_indice_min(lat_arbre_1,lon_arbre_1)
-    indice_min_2 = trouver_indice_min(lat_arbre_2,lon_arbre_2)
+    indice_min_lst = []
+    for i in range(nb_arbres):
+        indice_min_lst+=trouver_indice_min(lat_arbre[i]],lon_arbre[i]})
+    
 
     def trouver_intersection(nodes, indice, direction, nom_route):
         lat_node = float(nodes[indice].lat)
@@ -153,9 +161,10 @@ if __name__ == "__main__":
         )
         ways = result.ways
         if len(ways) > 1:
-            for i in range(len(ways)):
-                if "name" in ways[i].tags.keys() and ways[i].tags["name"] != nom_route:
-                    return ways[i].tags["name"]
+            if "name" in ways[0].tags.keys() and ways[0].tags["name"] != nom_route:
+                return ways[0].tags["name"]
+            elif "name" in ways[1].tags.keys() and ways[1].tags["name"] != nom_route:
+                return ways[1].tags["name"]
         if indice + direction < 0:
             return "debut de route"
         elif indice + direction >= len(nodes):

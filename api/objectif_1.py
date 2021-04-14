@@ -145,10 +145,9 @@ if __name__ == "__main__":
         )
         ways = result.ways
         if len(ways) > 1:
-            if "name" in ways[0].tags.keys() and ways[0].tags["name"] != nom_route:
-                return ways[0].tags["name"]
-            elif "name" in ways[1].tags.keys() and ways[1].tags["name"] != nom_route:
-                return ways[1].tags["name"]
+            for i in range(len(ways)):
+                if "name" in ways[i].tags.keys() and ways[i].tags["name"] != nom_route:
+                    return ways[i].tags["name"]
         if indice + direction < 0:
             return "debut de route"
         elif indice + direction >= len(nodes):
