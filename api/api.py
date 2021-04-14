@@ -10,9 +10,11 @@ if __name__ == "__main__":
     """
 
     # get coords
-    lat =   48.89227652 #48.89525193
-    lon =   2.253773690 #2.247122897
-
+    lat =   48.89227652 
+    lon =   2.253773690 
+    
+    # lat = 48.89525193
+    # lon = 2.247122897
     # retrieve city and way
     locator = Nominatim(user_agent="myGeocoder")
     coordinates = "{}, {}".format(lat, lon)
@@ -153,7 +155,7 @@ if __name__ == "__main__":
         trouver_intersection(nodes, indice_min, -1, nom),
         trouver_intersection(nodes, indice_min + 1, 1, nom),
     )
-
+    # print(addr)
     print(
         "Sur la "
         + nom
@@ -162,5 +164,5 @@ if __name__ == "__main__":
         + " et la "
         + intersection2
         + " dans la ville de "
-        + addr[5]
+        + addr[-7]
     )
