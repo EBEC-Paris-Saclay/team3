@@ -171,7 +171,7 @@ def give_location2(nodes, name, adrr, coordinates):
         trouver_intersection(nodes, indice_min + 1, 1, name),
     )
 
-    print('intersection trouvée')
+    print('intersections trouvées')
 
     # Define order
 
@@ -189,7 +189,7 @@ def give_location2(nodes, name, adrr, coordinates):
         distances = []
         for element in groupe:
             distances.append((norme_carre(
-                (element[2]-nodes[element[0]].lat, element[3]-nodes[element[0]].lon)), element[1]))
+                (element[2]-float(nodes[element[0]].lat), element[3]-float(nodes[element[0]].lon))), element[1]))
         distances.sort()
         dernier_compteur = compteur
         for _, j in distances:
@@ -206,7 +206,7 @@ def give_location2(nodes, name, adrr, coordinates):
         + " dans la ville de "
         + addr[-7]
     )
-    for j in len(coordinates):
+    for j in range(len(coordinates)):
         if j == 0:
             print("Le {}er arbre est".format(
                 numerotation[j]), coordinates[j][0], coordinates[j][1])
@@ -217,5 +217,5 @@ def give_location2(nodes, name, adrr, coordinates):
 
 way, addr = find_city_way(lat, lon)
 print('way:', way, 'addr:', addr)
-give_location(way.get_nodes(resolve_missing=True),
-              way.tags['name'], addr, coordinates)
+give_location2(way.get_nodes(resolve_missing=True),
+               way.tags['name'], addr, coordinates)
