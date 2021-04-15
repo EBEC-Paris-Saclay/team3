@@ -11,8 +11,8 @@ if __name__ == '__main__':
     # The api which will execute all the requests on the online map
     api = overpy.Overpass()
     # get coords
-    lat = 42.578662102027714
-    lon = 8.833259275041302
+    lat = 48.89525193 
+    lon = 2.247122897
     
     
 

@@ -177,7 +177,6 @@ def find_intersection(api, nodes, indice, direction, name):
     if len(ways) > 1:
         for i in range(len(ways)):
             if "name" in ways[i].tags.keys() and ways[i].tags["name"] != name:
-                print(ways[i].tags["name"])
                 return ways[i].tags["name"]
     if indice + direction < 0:
         return "debut de route"
