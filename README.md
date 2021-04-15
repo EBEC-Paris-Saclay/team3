@@ -48,8 +48,8 @@ inputs = ' put here the list of positions '
 ## Requirements
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install OverPy et GeoPy.
+Run the following command at the root of the repo.
 
 ```bash
-pip install overpy
-pip install geopy
+pip install -r requirements.txt
 ```
