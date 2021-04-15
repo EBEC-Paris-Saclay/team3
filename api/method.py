@@ -1,4 +1,4 @@
-# coding: utf8
+# -*- coding: utf-8 -*-
 import overpy
 from geopy.geocoders import Nominatim
 
@@ -34,14 +34,15 @@ def find_way(api,lat,lon,addr):
     # query
     r = api.query(
         """
-    <query type="way" >
+    <query type="way" content_type="application/osm3s+xml">
+    <around lat="{}" lon="{}" radius="10"/>
+    <has-kv k="name" regv="{}|{}|{}"/>
     </query>
     <print />
-    """
+    """.format(lat,lon,addr[-8],addr[-9],addr[-10])
     )
-    print(r.ways)
-    # <around lat="{}" lon="{}" radius="10"/>
-    # <has-kv k="name" regv="{}|{}|{}"/>
+    #<has-kv k="name" v="{}"/>
+    #<around lat="{}" lon="{}" radius="10"/>
     # nb_way = len(r.ways)
     # route_trouvee = False
     # while not(route_trouvee):
