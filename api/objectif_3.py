@@ -1,5 +1,6 @@
 import overpy
 from geopy.geocoders import Nominatim
+from method import*
 
 if __name__ == "__main__":
     """
@@ -8,8 +9,7 @@ if __name__ == "__main__":
     - other objectives
     - get lat and lon as parameters
     """
- 
-    
+
     # get coords
     lat_arbre_1 =   48.897121406 
     lon_arbre_1 =   2.2479852324
@@ -17,7 +17,9 @@ if __name__ == "__main__":
     lat_arbre_2 =   48.89627806 
     lon_arbre_2 =   2.248657510
 
-    # retrieve city and way 
+
+
+    # retrieve city  
     locator = Nominatim(user_agent="myGeocoder")
     coordinates = "{}, {}".format(lat_arbre_1, lon_arbre_1) #the two trees need to be on the same way so we juste need to find the way of the first one
     location = locator.reverse(coordinates)
@@ -187,11 +189,11 @@ if __name__ == "__main__":
 
     #the algorithm print the result in natural language
     print(
-        "Sur  "
+        "Sur "
         + nom
-        + " entre  "
+        + " entre "
         + intersection1
-        + " et  "
+        + " et "
         + intersection2
         + " dans la ville de"
         + addr[-7]
