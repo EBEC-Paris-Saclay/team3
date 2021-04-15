@@ -38,14 +38,17 @@ def give_location2(api, nodes, name, adrr, coordinates):
     indices = find_nearest_section2(nodes, coordinates)
 
     # find intersections
-
+    print(len(nodes))
     indice_min = indices[0][0]
+    print(indice_min)
+    
 
 
     intersection1, intersection2 = (
         find_intersection(api, nodes, indice_min, -1, name),
         find_intersection(api, nodes, indice_min + 1, 1, name),
     )
+    print(intersection1, intersection2)
   
 
     # Define order
@@ -92,12 +95,12 @@ def give_location2(api, nodes, name, adrr, coordinates):
 
 if __name__ == '__main__':
     # The api which will execute all the request on the online map
-    api = overpy.Overpass()
+    api = overpy.Overpass(url='http://138.195.138.151/api/interpreter')
 
     # Inputs
 
-    coordinates = [(48.89535, 2.24697),
-                   (48.89529, 2.24705), (48.89518, 2.2472)]
+    coordinates = [(42.578662102027714, 8.833259275041302),
+                   (42.57861001312643, 8.833480925089084), (42.57858338989341, 8.833693143219941)]
 
     lat, lon = coordinates[0]
 

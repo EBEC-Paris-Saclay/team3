@@ -160,7 +160,7 @@ def find_intersection(api, nodes, indice, direction, name):
     result = api.query(
         """
         <query type="way">
-        <around lat="{}" lon="{}" radius="0"/>
+        <around lat="{}" lon="{}" radius="0.0001"/>
         </query>
         <print />
         """.format(
@@ -171,6 +171,7 @@ def find_intersection(api, nodes, indice, direction, name):
     if len(ways) > 1:
         for i in range(len(ways)):
             if "name" in ways[i].tags.keys() and ways[i].tags["name"] != name:
+                print(ways[i].tags["name"])
                 return ways[i].tags["name"]
     if indice + direction < 0:
         return "debut de route"
