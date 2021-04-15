@@ -34,7 +34,7 @@ def find_way(api,lat,lon,addr):
     # query
     r = api.query(
         """
-    <query type="way" content_type="application/osm3s+xml">
+    <query type="way">
     <around lat="{}" lon="{}" radius="10"/>
     <has-kv k="name" regv="{}|{}|{}"/>
     </query>

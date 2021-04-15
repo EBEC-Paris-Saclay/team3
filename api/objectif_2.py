@@ -95,7 +95,7 @@ def give_location2(api, nodes, name, adrr, coordinates):
 
 if __name__ == '__main__':
     # The api which will execute all the request on the online map
-    api = overpy.Overpass(url='http://138.195.138.151/api/interpreter')
+    api = overpy.Overpass()
 
     # Inputs
 
