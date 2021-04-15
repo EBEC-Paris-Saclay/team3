@@ -3,7 +3,7 @@ from geopy.geocoders import Nominatim
 
 
 def find_city_way(api, lat, lon):
-    ''' Find way: Find all ways around the radius {radius}, 
+    ''' Find way: Finds all ways around the radius {radius}, 
     reduce it when we find more than one and increase it when we find nothing
 
     :param lat: The latitude of the tree
@@ -91,7 +91,7 @@ def find_city_way(api, lat, lon):
 
 
 def inner_product(vect1, vect2):
-    ''' find the inner product of vect1 and vect2 
+    ''' Finds the inner product of vect1 and vect2 
 
     :param vect1: The coordinates of the first vector
     :param vect2: The coordinates of the second vector
@@ -105,7 +105,7 @@ def inner_product(vect1, vect2):
 
 
 def norm(vect):
-    ''' find the norm of vect
+    ''' Finds the norm of vect
 
     :param vect: coordinates of vect
     :return: norm of vect
@@ -115,10 +115,10 @@ def norm(vect):
 
 
 def find_nearest_section(nodes):
-    """ We look for the segment of the road which has the shortest orthogonal distance to the tree
+    """ Finds the segment of the road which has the shortest orthogonal distance to the tree
 
     :param nodes: The list of all nodes of the way
-    :return: The indice of the begining node of the section in the list nodes
+    :return: The indice of the beginning node of the section in the list nodes
 
      """
 
@@ -144,12 +144,12 @@ def find_nearest_section(nodes):
 
 
 def find_intersection(api, nodes, indice, direction, name):
-    ''' Since every segment of the road is not an intersection, we span the segment found with
+    ''' Since every segment of the road is not an intersection, this function spans the segment found with
     find_nearest_section
 
     :param nodes:The list of all nodes of the way
-    :param indice: The indice of the begining node of the section in the list nodes
-    :param direction: The orientaion of the segment
+    :param indice: The indice of the beginning node of the section in the list nodes
+    :param direction: The orientation of the segment
     :param name: The name of the road
     :return: The indice of the intersection in the list of nodes
 
@@ -181,12 +181,12 @@ def find_intersection(api, nodes, indice, direction, name):
 
 
 def give_location(api, nodes, name, adrr):
-    ''' Give the full location
+    ''' Gives the full location of the tree
 
     :param nodes: The list of all nodes of the road
     :param name: The name of the road
-    :param addr: The whole loaction of the tree
-    :return:?
+    :param addr: The location of the tree in lattitude and longitude
+    :return: A printed text showing the said full location
 
     '''
 
@@ -212,7 +212,7 @@ def give_location(api, nodes, name, adrr):
 
 
 if __name__ == '__main__':
-    # The api which will execute all the request on the online ma
+    # The api which will execute all the requests on the online map
     api = overpy.Overpass()
 
     # get coords
