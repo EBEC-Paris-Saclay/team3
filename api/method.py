@@ -115,7 +115,7 @@ def norm(vect):
     '''
     return inner_product(vect, vect)
 
-def find_nearest_section(nodes):
+def find_nearest_section(nodes,lat,lon):
     """ We look for the segment of the road which has the shortest orthogonal distance to the tree
 
     :param nodes: The list of all nodes of the way
@@ -179,7 +179,7 @@ def find_intersection(api, nodes, indice, direction, name):
     else:
         return find_intersection(api, nodes, indice + direction, direction, name)
 
-def give_location(api, nodes, name, adrr):
+def give_location(api, nodes, name, addr,lat,lon):
     ''' Give the full location
 
     :param nodes: The list of all nodes of the road
@@ -189,15 +189,11 @@ def give_location(api, nodes, name, adrr):
 
     '''
 
-    indice_min = find_nearest_section(nodes)
-    print('indice_min:', indice_min)
+    indice_min = find_nearest_section(nodes,lat,lon)
     intersection1, intersection2 = (
         find_intersection(api, nodes, indice_min, -1, name),
         find_intersection(api, nodes, indice_min + 1, 1, name),
     )
-    print(addr)
-    print('intersection 1:', intersection1,
-          'intersection 2:', intersection2)
     print(
         "Sur "
         + name

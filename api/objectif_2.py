@@ -1,6 +1,6 @@
 import overpy
 from geopy.geocoders import Nominatim
-from objectif_1 import find_city_way, inner_product, norm, find_intersection
+from method import*
 
 
 def find_nearest_section2(nodes, coordinates):
@@ -41,14 +41,12 @@ def give_location2(api, nodes, name, adrr, coordinates):
 
     indice_min = indices[0][0]
 
-    print('indice_min:', indice_min)
 
     intersection1, intersection2 = (
         find_intersection(api, nodes, indice_min, -1, name),
         find_intersection(api, nodes, indice_min + 1, 1, name),
     )
-
-    print('intersections trouvées')
+  
 
     # Define order
 
@@ -103,7 +101,7 @@ if __name__ == '__main__':
 
     lat, lon = coordinates[0]
 
-    way, addr = find_city_way(api, lat, lon)
-    print('way:', way, 'addr:', addr)
+    way = find_way(api, lat, lon)
+    addr = find_addr(lat, lon)
     give_location2(api, way.get_nodes(resolve_missing=True),
                    way.tags['name'], addr, coordinates)
