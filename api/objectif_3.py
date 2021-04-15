@@ -102,14 +102,18 @@ if __name__ == "__main__":
     # Beware that in openstreemap a node is not necessarly a intersection between ways but it can be just to fit the curve of the way
     # We consider that, in the scale of a city, the couple of coordinates (lat,lon) defines a Cartesian coordinate system
 
-    # prod_scalaire returns the scalar product of two vectors.
     def prod_scalaire(vect1, vect2):
+        """
+        returns the scalar product of two vectors.
+        """
         lat1, lon1 = vect1
         lat2, lon2 = vect2
         return lat1 * lat2 + lon1 * lon2
 
-    # norme_carre returns the square of the norme of e vector
     def norme_carre(vect):
+        """
+        returns the square of the norme of e vector
+        """
         return prod_scalaire(vect, vect)
 
     # get name of the way and the nodes it contains
@@ -145,11 +149,14 @@ if __name__ == "__main__":
     indice_min_1 = trouver_indice_min(lat_arbre_1, lon_arbre_1)
     indice_min_2 = trouver_indice_min(lat_arbre_2, lon_arbre_2)
 
-    # trouver intersection returns the first intersection at the right (if direction values 1) or left (if it values -1) of a node represented by its index in nodes
     def trouver_intersection(nodes, indice, direction, nom_route):
+        """
+        recursively looks for the first intersection at the right (if direction values 1) or left (if it values -1) of a node represented by its index in nodes
+        """
         lat_node = float(nodes[indice].lat)
         lon_node = float(nodes[indice].lon)
-        # this query returns the list of ways the node is in.
+
+        # this query returns the list of ways our node is in.
         result = api.query(
             """
             <query type="way">
@@ -161,6 +168,7 @@ if __name__ == "__main__":
             )
         )
         ways = result.ways
+
         # we want to find a node that is an intersection between at least two NAMED ways
         if len(ways) > 1:
             for i in range(len(ways)):
@@ -182,7 +190,7 @@ if __name__ == "__main__":
         intersection1 = trouver_intersection(nodes, indice_min_2, -1, nom)
         intersection2 = trouver_intersection(nodes, indice_min_1 + 1, 1, nom)
 
-    # the algorithm print the result in natural language
+    # the algorithm prints the result in natural language
     print(
         "Sur "
         + nom
