@@ -1,14 +1,16 @@
 import overpy
 from geopy.geocoders import Nominatim
 
-# get coords
-lat = 48.89227652
-lon = 2.253773690
 
-api = overpy.Overpass()
+def find_city_way(api, lat, lon):
+    ''' Find way: Find all ways around the radius {radius}, 
+    reduce it when we find more than one and increase it when we find nothing
 
+    :param lat: The latitude of the tree
+    :param lon: The longitude of the tree
+    :return : The way and the city where it's found
 
-def find_city_way(lat, lon):
+    '''
 
     # retrieve city and way
     locator = Nominatim(user_agent="myGeocoder")
@@ -34,8 +36,8 @@ def find_city_way(lat, lon):
     )
 
     nb_way = len(r.ways)
-    route_trouvee = False
-    while not(route_trouvee):
+    road_found = False
+    while not(road_found):
         if nb_way == 0:
             radius = 2 * radius
             r = api.query(
@@ -49,14 +51,14 @@ def find_city_way(lat, lon):
                 )
             )
         else:
-            nb_route_nommees = 0
+            nb_road_found = 0
             indice = 0
-            while nb_route_nommees < 2 and indice < nb_way:
+            while nb_road_found < 2 and indice < nb_way:
                 if 'name' in r.ways[indice].tags.keys():
-                    nb_route_nommees += 1
+                    nb_road_found += 1
                     way = r.ways[indice]
                 indice += 1
-            if nb_route_nommees == 2:
+            if nb_road_found == 2:
                 radius = 3 / 4 * radius
                 r = api.query(
                     """
@@ -68,7 +70,7 @@ def find_city_way(lat, lon):
                         lat, lon, radius
                     )
                 )
-            elif nb_route_nommees == 0:
+            elif nb_road_found == 0:
                 radius = 2 * radius
                 r = api.query(
                     """
@@ -81,48 +83,77 @@ def find_city_way(lat, lon):
                     )
                 )
             else:
-                route_trouvee = True
+                road_found = True
 
         nb_way = len(r.ways)
 
     return way, addr
 
 
-def prod_scalaire(vect1, vect2):
+def inner_product(vect1, vect2):
+    ''' find the inner product of vect1 and vect2 
+
+    :param vect1: The coordinates of the first vector
+    :param vect2: The coordinates of the second vector
+    :return : The inner product of vect1 and vect2
+
+    '''
+
     lat1, lon1 = vect1
     lat2, lon2 = vect2
     return lat1 * lat2 + lon1 * lon2
 
 
-def norme_carre(vect):
-    return prod_scalaire(vect, vect)
+def norm(vect):
+    ''' find the norm of vect
+
+    :param vect: coordinates of vect
+    :return: norm of vect
+
+    '''
+    return inner_product(vect, vect)
 
 
 def find_nearest_section(nodes):
+    """ We look for the segment of the road which has the shortest orthogonal distance to the tree
 
-    # trouver le segment le plus proche de l'arbre
-    distance_min_carre = 10000
+    :param nodes: The list of all nodes of the way
+    :return: The indice of the begining node of the section in the list nodes
+
+     """
+
+    distance_min = 10000
     indice_min = 0
     for indice in range(len(nodes) - 1):
         lat1 = float(nodes[indice].lat)
         lon1 = float(nodes[indice].lon)
         lat2 = float(nodes[indice + 1].lat)
         lon2 = float(nodes[indice + 1].lon)
-        t = prod_scalaire(
+        t = inner_product(
             (lat - lat1, lon - lon1), (lat2 - lat1, lon2 - lon1)
-        ) / norme_carre((lat2 - lat1, lon2 - lon1))
+        ) / norm((lat2 - lat1, lon2 - lon1))
         t = min(max(0, t), 1)
         latH = lat1 + (lat2 - lat1) * t
         lonH = lon1 + (lon2 - lon1) * t
-        distance = norme_carre((lat - latH, lon - lonH))
-        if distance_min_carre > distance:
-            distance_min_carre = distance
+        distance = norm((lat - latH, lon - lonH))
+        if distance_min > distance:
+            distance_min = distance
             indice_min = indice
 
     return indice_min
 
 
-def trouver_intersection(nodes, indice, direction, nom_route):
+def find_intersection(api, nodes, indice, direction, name):
+    ''' Since every segment of the road is not an intersection, we span the segment found with
+    find_nearest_section
+
+    :param nodes:The list of all nodes of the way
+    :param indice: The indice of the begining node of the section in the list nodes
+    :param direction: The orientaion of the segment
+    :param name: The name of the road
+    :return: The indice of the intersection in the list of nodes
+
+    '''
 
     lat = float(nodes[indice].lat)
     lon = float(nodes[indice].lon)
@@ -139,24 +170,33 @@ def trouver_intersection(nodes, indice, direction, nom_route):
     ways = result.ways
     if len(ways) > 1:
         for i in range(len(ways)):
-            if "name" in ways[i].tags.keys() and ways[i].tags["name"] != nom_route:
+            if "name" in ways[i].tags.keys() and ways[i].tags["name"] != name:
                 return ways[i].tags["name"]
     if indice + direction < 0:
         return "debut de route"
     elif indice + direction >= len(nodes):
         return "fin de route"
     else:
-        return trouver_intersection(nodes, indice + direction, direction, nom_route)
+        return find_intersection(api, nodes, indice + direction, direction, name)
 
 
-def give_location(nodes, name, adrr):
+def give_location(api, nodes, name, adrr):
+    ''' Give the full location
+
+    :param nodes: The list of all nodes of the road
+    :param name: The name of the road
+    :param addr: The whole loaction of the tree
+    :return:?
+
+    '''
+
     indice_min = find_nearest_section(nodes)
     print('indice_min:', indice_min)
     intersection1, intersection2 = (
-        trouver_intersection(nodes, indice_min, -1, name),
-        trouver_intersection(nodes, indice_min + 1, 1, name),
+        find_intersection(api, nodes, indice_min, -1, name),
+        find_intersection(api, nodes, indice_min + 1, 1, name),
     )
-    # print(addr)
+    print(addr)
     print('intersection 1:', intersection1,
           'intersection 2:', intersection2)
     print(
@@ -171,6 +211,15 @@ def give_location(nodes, name, adrr):
     )
 
 
-way, addr = find_city_way(lat, lon)
-print('way:', way, 'addr:', addr)
-give_location(way.get_nodes(resolve_missing=True), way.tags['name'], addr)
+if __name__ == '__main__':
+    # The api which will execute all the request on the online ma
+    api = overpy.Overpass()
+
+    # get coords
+    lat = 48.89227652
+    lon = 2.253773690
+
+    way, addr = find_city_way(api, lat, lon)
+    print('way:', way, 'addr:', addr)
+    give_location(api, way.get_nodes(
+        resolve_missing=True), way.tags['name'], addr)
