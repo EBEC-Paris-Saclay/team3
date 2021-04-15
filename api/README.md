@@ -34,7 +34,7 @@ inputs = ' put here the list of positions '
 With the Latitudes and Longitudes of several trees that are in the same route it finds the name of city and neighbourhood shared by the trees, as well as the names of the 2 routes (if they exist) that serve as boundaries to both trees.
 
 ### Usage
-Put the list of positions of 2 trees in the variable inputs and run the program.
+Put the list of positions of the trees in the variable inputs and run the program.
 ```python
 inputs = ' put here the list of positions '
 ```
