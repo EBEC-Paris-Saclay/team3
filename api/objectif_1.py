@@ -115,7 +115,7 @@ def norm(vect):
 
 
 def find_nearest_section(nodes):
-    """ We look for the segment of the road which has the shortest orthogonal distance to the tree
+    """ Finds the segment of the road which has the shortest orthogonal distance to the tree
 
     :param nodes: The list of all nodes of the way
     :return: The indice of the beginning node of the section in the list nodes
@@ -144,7 +144,7 @@ def find_nearest_section(nodes):
 
 
 def find_intersection(api, nodes, indice, direction, name):
-    ''' Since every segment of the road is not an intersection, we span the segment found with
+    ''' Since every segment of the road is not an intersection, this function spans the segment found with
     find_nearest_section
 
     :param nodes:The list of all nodes of the way
@@ -212,7 +212,7 @@ def give_location(api, nodes, name, adrr):
 
 
 if __name__ == '__main__':
-    # The api which will execute all the request on the online ma
+    # The api which will execute all the requests on the online map
     api = overpy.Overpass()
 
     # get coords
