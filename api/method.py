@@ -13,10 +13,10 @@ def find_addr(lat,lon):
     coordinates = "{}, {}".format(lat, lon)
     location = locator.reverse(coordinates)
     addr = location.address
-    addr = addr.split(",")
+    addr = addr.split(", ")
     return addr
 
-def find_way(api,lat,lon):
+def find_way(api,lat,lon,addr):
     ''' Find way: Find all ways around the radius {radius}, 
     reduce it when we find more than one and increase it when we find nothing
 
@@ -27,70 +27,73 @@ def find_way(api,lat,lon):
     '''
     # init du radius
     radius = 1
-
+    print(addr[-8],addr[-9],addr)
     # query
-
     r = api.query(
         """
     <query type="way">
-    <around lat="{}" lon="{}" radius="{}"/>
+    <around lat="{}" lon="{}" radius="10"/>
+    <has-kv k="name" regv="{}|{}|{}"/>
     </query>
     <print />
-    """.format(
-            lat, lon, radius
-        )
+    """.format(lat,lon,addr[-8],addr[-9],addr[-10])
     )
-
-    nb_way = len(r.ways)
-    route_trouvee = False
-    while not(route_trouvee):
-        if nb_way == 0:
-            radius = 2 * radius
-            r = api.query(
-                """
-            <query type="way">
-            <around lat="{}" lon="{}" radius="{}"/>
-            </query>
-            <print />
-            """.format(
-                    lat, lon, radius
-                )
-            )
-        else:
-            nb_route_nommees = 0
-            indice = 0
-            while nb_route_nommees < 2 and indice < nb_way:
-                if 'name' in r.ways[indice].tags.keys():
-                    nb_route_nommees += 1
-                    way = r.ways[indice]
-                indice += 1
-            if nb_route_nommees == 2:
-                radius = 3 / 4 * radius
-                r = api.query(
-                    """
-                <query type="way">
-                <around lat="{}" lon="{}" radius="{}"/>
-                </query>
-                <print />
-                """.format(
-                        lat, lon, radius
-                    )
-                )
-            elif nb_route_nommees == 0:
-                radius = 2 * radius
-                r = api.query(
-                    """
-                <query type="way">
-                <around lat="{}" lon="{}" radius="{}"/>
-                </query>
-                <print />
-                """.format(
-                        lat, lon, radius
-                    )
-                )
-            else:
-                route_trouvee = True
-        nb_way = len(r.ways)
+    #<has-kv k="name" v="{}"/>
+    #<around lat="{}" lon="{}" radius="10"/>
+    # nb_way = len(r.ways)
+    # route_trouvee = False
+    # while not(route_trouvee):
+    #     if nb_way == 0:
+    #         radius = 2 * radius
+    #         r = api.query(
+    #             """
+    #         <query type="way">
+    #         <around lat="{}" lon="{}" radius="{}"/>
+    #         </query>
+    #         <print />
+    #         """.format(
+    #                 lat, lon, radius
+    #             )
+    #         )
+    #     else:
+    #         nb_route_nommees = 0
+    #         indice = 0
+    #         while nb_route_nommees < 2 and indice < nb_way:
+    #             if 'name' in r.ways[indice].tags.keys():
+    #                 nb_route_nommees += 1
+    #                 way = r.ways[indice]
+    #             indice += 1
+    #         if nb_route_nommees == 2:
+    #             radius = 3 / 4 * radius
+    #             r = api.query(
+    #                 """
+    #             <query type="way">
+    #             <around lat="{}" lon="{}" radius="{}"/>
+    #             </query>
+    #             <print />
+    #             """.format(
+    #                     lat, lon, radius
+    #                 )
+    #             )
+    #         elif nb_route_nommees == 0:
+    #             radius = 2 * radius
+    #             r = api.query(
+    #                 """
+    #             <query type="way">
+    #             <around lat="{}" lon="{}" radius="{}"/>
+    #             </query>
+    #             <print />
+    #             """.format(
+    #                     lat, lon, radius
+    #                 )
+    #             )
+    #         else:
+    #             route_trouvee = True
+    #     nb_way = len(r.ways)
+    for way in r.ways:
+        if 'name' in way.tags:
+            print(way.tags['name'])
+    way=r.ways[0]
     return way
 
 def inner_product(vect1, vect2):
