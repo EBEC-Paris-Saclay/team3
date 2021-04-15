@@ -149,7 +149,7 @@ from method import *
 #     indice_min_1 = trouver_indice_min(lat_arbre_1, lon_arbre_1)
 #     indice_min_2 = trouver_indice_min(lat_arbre_2, lon_arbre_2)
 
-#     def trouver_intersection(nodes, indice, direction, nom_route):
+#     def find_intersection(nodes, indice, direction, nom_route):
 #         """
 #         recursively looks for the first intersection at the right (if direction values 1) or left (if it values -1) of a node represented by its index in nodes
 #         """
@@ -180,15 +180,15 @@ from method import *
 #         elif indice + direction >= len(nodes):
 #             return "fin de route"
 #         else:
-#             return trouver_intersection(nodes, indice + direction, direction, nom_route)
+#             return find_intersection(nodes, indice + direction, direction, nom_route)
 
 #     # depending on the relative position of the two trees in the way, we find the two intersections we need
 #     if indice_min_1 < indice_min_2:
-#         intersection1 = trouver_intersection(nodes, indice_min_1, -1, nom)
-#         intersection2 = trouver_intersection(nodes, indice_min_2 + 1, 1, nom)
+#         intersection1 = find_intersection(nodes, indice_min_1, -1, nom)
+#         intersection2 = find_intersection(nodes, indice_min_2 + 1, 1, nom)
 #     else:
-#         intersection1 = trouver_intersection(nodes, indice_min_2, -1, nom)
-#         intersection2 = trouver_intersection(nodes, indice_min_1 + 1, 1, nom)
+#         intersection1 = find_intersection(nodes, indice_min_2, -1, nom)
+#         intersection2 = find_intersection(nodes, indice_min_1 + 1, 1, nom)
 
 #     # the algorithm prints the result in natural language
 #     print(
@@ -216,11 +216,11 @@ def give_location3(api, nodes, name, addr,lat1,lon1,lat2,lon2):
     indice_min_2 = find_nearest_section(nodes,lat2,lon2)
 
     if indice_min_1 < indice_min_2:
-        intersection1 = trouver_intersection(nodes, indice_min_1, -1, nom)
-        intersection2 = trouver_intersection(nodes, indice_min_2 + 1, 1, nom)
+        intersection1 = find_intersection(api, nodes, indice_min_1, -1, name)
+        intersection2 = find_intersection(api, nodes, indice_min_2 + 1, 1, name)
     else:
-        intersection1 = trouver_intersection(nodes, indice_min_2, -1, nom)
-        intersection2 = trouver_intersection(nodes, indice_min_1 + 1, 1, nom)
+        intersection1 = find_intersection(api, nodes, indice_min_2, -1, name)
+        intersection2 = find_intersection(api, nodes, indice_min_1 + 1, 1, name)
 
     print(
         "Sur "
@@ -248,4 +248,4 @@ if __name__ == "__main__":
     addr = find_addr(lat_arbre_1, lon_arbre_1)
     way = find_way(api, lat_arbre_1, lon_arbre_1, addr)
     give_location3(api, way.get_nodes(
-        resolve_missing=True), way.tags['name'], addr,lat,lon)
+        resolve_missing=True), way.tags['name'], addr,lat_arbre_1,lon_arbre_1,lat_arbre_2,lon_arbre_2)

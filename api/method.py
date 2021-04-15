@@ -1,3 +1,4 @@
+# coding: utf8
 import overpy
 from geopy.geocoders import Nominatim
 
@@ -14,6 +15,8 @@ def find_addr(lat,lon):
     location = locator.reverse(coordinates)
     addr = location.address
     addr = addr.split(", ")
+    while len(addr)<10:
+        addr=['easter_egg']+addr
     return addr
 
 def find_way(api,lat,lon,addr):
@@ -27,19 +30,18 @@ def find_way(api,lat,lon,addr):
     '''
     # init du radius
     radius = 1
-    print(addr[-8],addr[-9],addr)
+    # print(addr[-8],addr[-9],addr)
     # query
     r = api.query(
         """
-    <query type="way">
-    <around lat="{}" lon="{}" radius="10"/>
-    <has-kv k="name" regv="{}|{}|{}"/>
+    <query type="way" >
     </query>
     <print />
-    """.format(lat,lon,addr[-8],addr[-9],addr[-10])
+    """
     )
-    #<has-kv k="name" v="{}"/>
-    #<around lat="{}" lon="{}" radius="10"/>
+    print(r.ways)
+    # <around lat="{}" lon="{}" radius="10"/>
+    # <has-kv k="name" regv="{}|{}|{}"/>
     # nb_way = len(r.ways)
     # route_trouvee = False
     # while not(route_trouvee):
@@ -90,9 +92,9 @@ def find_way(api,lat,lon,addr):
     #         else:
     #             route_trouvee = True
     #     nb_way = len(r.ways)
-    for way in r.ways:
-        if 'name' in way.tags:
-            print(way.tags['name'])
+    # for way in r.ways:
+    #     if 'name' in way.tags:
+            # print(way.tags['name'])
     way=r.ways[0]
     return way
 
