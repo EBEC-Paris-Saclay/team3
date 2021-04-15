@@ -1,4 +1,11 @@
 # Presentation
+EBEC 2021 Competition project
+
+Evergreen Team members:
+Louis Bouthillon
+Emmanuel Varda
+Walid Astaoui
+Inés Dormoy
 
 This project is divided in 4 parts :
 
